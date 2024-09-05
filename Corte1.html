@@ -7,6 +7,7 @@
     
     <!-- Importación de la librería Chart.js desde CDN para crear gráficos -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     
     <style>
         /* Estilo básico para el cuerpo del documento */
@@ -104,6 +105,8 @@
     </div>
 
     <script>
+    let myChart; // Variable global para almacenar la referencia del gráfico
+
     function procesar() {
         const totalCiclos = 1000; // Número de iteraciones para el cálculo
         let totalArcsin = 0;
@@ -178,49 +181,63 @@
         document.getElementById('totalLog').innerText = totalLog;
         document.getElementById('porcentajeLog').innerText = porcentajeLog + '%';
 
-        // Creación del gráfico de torta usando Chart.js
-        const ctx = document.getElementById('myChart').getContext('2d');
-        new Chart(ctx, {
-            type: 'pie',
-            data: {
-                labels: ['Errores Arcsin', 'Errores Arccos', 'Errores Raíz Cuadrada', 'Errores División', 'Errores Logaritmo'],
-                datasets: [{
-                    label: 'Errores',
-                    data: [totalArcsin, totalArccos, totalSqrt, totalDivision, totalLog], // Datos de los errores
-                    backgroundColor: [ // Colores para cada tipo de error
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(153, 102, 255, 0.2)'
-                    ],
-                    borderColor: [ // Bordes para los colores
-                        'rgba(255, 99, 132, 1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(153, 102, 255, 1)'
-                    ],
-                    borderWidth: 1 // Grosor del borde
-                }]
-            },
-            options: {
-                responsive: true,
-                aspectRatio: 1, // Mantiene un aspecto 1:1 en el gráfico
-                plugins: {
-                    legend: {
-                        position: 'top', // Posición de la leyenda
-                    },
-                    tooltip: {
-                        enabled: true // Habilitar tooltips
-                    },
+        // Datos para el gráfico
+        const data = {
+            labels: ['Errores Arcsin', 'Errores Arccos', 'Errores Raíz Cuadrada', 'Errores División', 'Errores Logaritmo'],
+            datasets: [{
+                label: 'Errores',
+                data: [totalArcsin, totalArccos, totalSqrt, totalDivision, totalLog], // Datos de los errores
+                backgroundColor: [ // Colores para cada tipo de error
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)'
+                ],
+                borderColor: [ // Bordes para los colores
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)'
+                ],
+                borderWidth: 1 // Grosor del borde
+            }]
+        };
+
+        // Opciones para el gráfico
+        const options = {
+            responsive: true,
+            aspectRatio: 1, // Mantiene un aspecto 1:1 en el gráfico
+            plugins: {
+                legend: {
+                    position: 'top', // Posición de la leyenda
                 },
-                layout:{
-                    padding: 5 // Espaciado dentro del gráfico
-                }
+                tooltip: {
+                    enabled: true // Habilitar tooltips
+                },
+            },
+            layout:{
+                padding: 5 // Espaciado dentro del gráfico
             }
-        });
+        };
+
+        // Si el gráfico ya existe, actualiza los datos
+        if (myChart) {
+            myChart.data = data;
+            myChart.update();
+        } else {
+            // Crear el gráfico por primera vez
+            const ctx = document.getElementById('myChart').getContext('2d');
+            myChart = new Chart(ctx, {
+                type: 'pie',
+                data: data,
+                options: options
+            });
+        }
     }
     </script>
+</body>
+</html>
 </body>
 </html>
