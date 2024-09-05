@@ -4,43 +4,63 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Simulación de Ecuación Matemática</title>
+    
+    <!-- Importación de la librería Chart.js desde CDN para crear gráficos -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
     <style>
+        /* Estilo básico para el cuerpo del documento */
         body {
-            font-family: Arial, sans-serif;
+            font-family: Trebuchet MS, sans-serif;
             text-align: center;
             padding: 20px;
         }
+
+        /* Estilo para centrar la tabla y ajustar su tamaño */
         table {
             margin: 0 auto;
             border-collapse: collapse;
             width: 40%;
         }
+
+        /* Estilo para las celdas de la tabla */
         th, td {
-            border: 1px solid #ddd;
+            border: 1px solid #000000;
             padding: 8px;
         }
+
+        /* Color de fondo para los encabezados de la tabla */
         th {
-            background-color: #f2f2f2;
+            background-color: #B0B0B0;
         }
+
+        /* Estilo para el lienzo del gráfico (espacio donde se dibuja) */
         canvas {
             margin-top: 20px;
         }
     </style>
 </head>
 <body>
+    <!-- Título y datos del autor -->
     <h1>Programación Web Corte 1</h1>
     <p>Nombre Completo: Yulder Felipe Orozco Londoño</p>
     <p>Código: 2216616</p>
     
     <h2>Ecuación:</h2>
     <center>
-    <img src="https://github.com/Yulder12/Web-pages/blob/main/EcuaciónFinal.png?raw=true" width="500" height="130">
+        <!-- Imagen de la ecuación alojada en GitHub -->
+        <img src="https://github.com/Yulder12/Web-pages/blob/main/EcuaciónFinal.png?raw=true" width="500" height="130">
     </center>
+    
+    <!-- Botón que inicia el procesamiento al ser clickeado -->
     <p>
-    <button onclick="procesar()">Procesar</button>
+        <button onclick="procesar()">Procesar</button>
     </p>
+
+    <!-- Título de la sección de resultados -->
     <h2>Resultados</h2>
+
+    <!-- Tabla que muestra los tipos de errores y su conteo -->
     <table>
         <thead>
             <tr>
@@ -78,20 +98,23 @@
         </tbody>
     </table>
 
+    <!-- Contenedor para el gráfico -->
     <div style="width: 380px; height: 380px; margin: 0 auto;">
-        <canvas id="myChart"></canvas>
+        <canvas id="myChart"></canvas> <!-- Lienzo donde se dibuja el gráfico de errores -->
     </div>
 
     <script>
     function procesar() {
-        const totalCiclos = 1000;
+        const totalCiclos = 1000; // Número de iteraciones para el cálculo
         let totalArcsin = 0;
         let totalArccos = 0;
         let totalSqrt = 0;
         let totalDivision = 0;
         let totalLog = 0;
 
+        // Ciclo que simula los cálculos de la ecuación
         for (let i = 0; i < totalCiclos; i++) {
+            // Generación de valores aleatorios entre -1 y 1 para las variables
             const a = Math.random() * 2 - 1;
             const b = Math.random() * 2 - 1;
             const c = Math.random() * 2 - 1;
@@ -110,7 +133,7 @@
             const p = Math.random() * 2 - 1;
 
             try {
-                // Comprobamos manualmente el dominio de cada función
+                // Comprobación del dominio de las funciones para evitar errores
                 if (a - b < -1 || a - b > 1) throw new Error('Arccos fuera de dominio');
                 if (c + Math.sqrt(d) < -1 || c + Math.sqrt(d) > 1) throw new Error('Arcsin fuera de dominio');
                 if (h - i < -1 || h - i > 1) throw new Error('Arccos fuera de dominio');
@@ -119,13 +142,14 @@
                 if (e <= 0 || f <= 0 || o - p <= 0) throw new Error('Logaritmo de número no positivo');
                 if (l === 0 || m === 0) throw new Error('División por cero');
 
-                // Si todo es válido, calculamos el resultado
+                // Cálculo de la ecuación si no hay errores
                 const result = (Math.acos(a - b) + Math.asin(c + Math.sqrt(d)) + Math.log(e) / Math.log(f) + Math.sqrt(g)) /
                             ((Math.acos(h - i) + Math.asin(j * k) / (l / m)) * (Math.sqrt(n) + Math.log(o - p)));
 
             } catch (error) {
                 console.log('Error encontrado:', error.message);
 
+                // Contabilizar el tipo de error encontrado
                 if (error.message.includes('Arcsin')) totalArcsin++;
                 if (error.message.includes('Arccos')) totalArccos++;
                 if (error.message.includes('Raíz cuadrada')) totalSqrt++;
@@ -134,6 +158,7 @@
             }
         }
 
+        // Cálculo del total de errores y porcentaje para cada tipo
         const totalErrores = totalArcsin + totalArccos + totalSqrt + totalDivision + totalLog;
         const porcentajeArcsin = (totalArcsin / totalErrores * 100).toFixed(2);
         const porcentajeArccos = (totalArccos / totalErrores * 100).toFixed(2);
@@ -141,6 +166,7 @@
         const porcentajeDivision = (totalDivision / totalErrores * 100).toFixed(2);
         const porcentajeLog = (totalLog / totalErrores * 100).toFixed(2);
 
+        // Actualización de los valores en la tabla HTML
         document.getElementById('totalArcsin').innerText = totalArcsin;
         document.getElementById('porcentajeArcsin').innerText = porcentajeArcsin + '%';
         document.getElementById('totalArccos').innerText = totalArccos;
@@ -152,6 +178,7 @@
         document.getElementById('totalLog').innerText = totalLog;
         document.getElementById('porcentajeLog').innerText = porcentajeLog + '%';
 
+        // Creación del gráfico de torta usando Chart.js
         const ctx = document.getElementById('myChart').getContext('2d');
         new Chart(ctx, {
             type: 'pie',
@@ -159,37 +186,37 @@
                 labels: ['Errores Arcsin', 'Errores Arccos', 'Errores Raíz Cuadrada', 'Errores División', 'Errores Logaritmo'],
                 datasets: [{
                     label: 'Errores',
-                    data: [totalArcsin, totalArccos, totalSqrt, totalDivision, totalLog],
-                    backgroundColor: [
+                    data: [totalArcsin, totalArccos, totalSqrt, totalDivision, totalLog], // Datos de los errores
+                    backgroundColor: [ // Colores para cada tipo de error
                         'rgba(255, 99, 132, 0.2)',
                         'rgba(54, 162, 235, 0.2)',
                         'rgba(255, 206, 86, 0.2)',
                         'rgba(75, 192, 192, 0.2)',
                         'rgba(153, 102, 255, 0.2)'
                     ],
-                    borderColor: [
+                    borderColor: [ // Bordes para los colores
                         'rgba(255, 99, 132, 1)',
                         'rgba(54, 162, 235, 1)',
                         'rgba(255, 206, 86, 1)',
                         'rgba(75, 192, 192, 1)',
                         'rgba(153, 102, 255, 1)'
                     ],
-                    borderWidth: 1
+                    borderWidth: 1 // Grosor del borde
                 }]
             },
             options: {
                 responsive: true,
-                aspectRatio: 1, // Mantiene un aspecto 1:1
+                aspectRatio: 1, // Mantiene un aspecto 1:1 en el gráfico
                 plugins: {
                     legend: {
-                        position: 'top',
+                        position: 'top', // Posición de la leyenda
                     },
                     tooltip: {
-                        enabled: true
+                        enabled: true // Habilitar tooltips
                     },
                 },
                 layout:{
-                    padding: 20
+                    padding: 5 // Espaciado dentro del gráfico
                 }
             }
         });
