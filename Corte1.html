@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulación de Ecuación Matemática</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+        }
+        table {
+            margin: 0 auto;
+            border-collapse: collapse;
+            width: 40%;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        canvas {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Simulación de Ecuación Matemática</h1>
+    <p>Nombre Completo: Yulder Felipe Orozco Londoño</p>
+    <p>Código: 1006326747</p>
+    
+    <h2>Ecuación:</h2>
+    <center>
+    <img src="imagen de la nube" width="500" height="130"
+    </center>
+    <p>
+        Y = (acos(x - z) + asin(y * w + sqrt(u - v)) + ln(p)) / (asin(s / r + sqrt(q - n)) * ln(m - o) + acos((k - l) / j))
+    </p>
+
+    <button onclick="procesar()">Procesar</button>
+
+    <h2>Resultados</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Tipo de Error</th>
+                <th>Total</th>
+                <th>Porcentaje</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Total de errores de arcoseno</td>
+                <td id="totalArcsin">0</td>
+                <td id="porcentajeArcsin">0%</td>
+            </tr>
+            <tr>
+                <td>Total de errores de arcocoseno</td>
+                <td id="totalArccos">0</td>
+                <td id="porcentajeArccos">0%</td>
+            </tr>
+            <tr>
+                <td>Total de errores de raíz cuadrada</td>
+                <td id="totalSqrt">0</td>
+                <td id="porcentajeSqrt">0%</td>
+            </tr>
+            <tr>
+                <td>Total de errores de división</td>
+                <td id="totalDivision">0</td>
+                <td id="porcentajeDivision">0%</td>
+            </tr>
+            <tr>
+                <td>Total de errores de logaritmo natural</td>
+                <td id="totalLog">0</td>
+                <td id="porcentajeLog">0%</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div style="width: 380px; height: 380px; margin: 0 auto;">
+        <canvas id="myChart"></canvas>
+    </div>
+
+    <script>
+    function procesar() {
+        const totalCiclos = 1000;
+        let totalArcsin = 0;
+        let totalArccos = 0;
+        let totalSqrt = 0;
+        let totalDivision = 0;
+        let totalLog = 0;
+
+        for (let i = 0; i < totalCiclos; i++) {
+            const x = Math.random() * 2 - 1;
+            const y = Math.random() * 2 - 1;
+            const z = Math.random() * 2 - 1;
+            const w = Math.random() * 2 - 1;
+            const u = Math.random() * 2 - 1;
+            const v = Math.random() * 2 - 1;
+            const p = Math.random() * 2 - 1;
+            const s = Math.random() * 2 - 1;
+            const r = Math.random() * 2 - 1;
+            const q = Math.random() * 2 - 1;
+            const n = Math.random() * 2 - 1;
+            const m = Math.random() * 2 - 1;
+            const o = Math.random() * 2 - 1;
+            const k = Math.random() * 2 - 1;
+            const l = Math.random() * 2 - 1;
+            const j = Math.random() * 2 - 1;
+
+
+            try {
+                // Comprobamos manualmente el dominio de cada función
+                if (x - z < -1 || x - z > 1) throw new Error('Arccos fuera de dominio');
+                if (y * w + Math.sqrt(u - v) < -1 || y * w + Math.sqrt(u - v) > 1) throw new Error('Arcsin fuera de dominio');
+                if (s / r + Math.sqrt(q - n) < -1 || s / r + Math.sqrt(q - n) > 1) throw new Error('Arcsin fuera de dominio');
+                if (k - l < -1 || k - l > 1) throw new Error('Arccos fuera de dominio');
+                if (u - v < 0 || q - n < 0) throw new Error('Raíz cuadrada de número negativo');
+                if (r === 0 || j === 0) throw new Error('División por cero');
+                if (p <= 0 || m - o <= 0) throw new Error('Logaritmo de número no positivo');
+                if (Math.abs(r) < 0.01 || Math.abs(j) < 0.01) throw new Error('División por cero');
+
+                // Si todo es válido, calculamos el resultado
+                const result = (Math.acos(x - z) + Math.asin(y * w + Math.sqrt(u - v)) + Math.log(p)) / 
+                            (Math.asin(s / r + Math.sqrt(q - n)) * Math.log(m - o) + Math.acos((k - l) / j));
+
+            } catch (error) {
+                console.log('Error encontrado:', error.message);
+
+                if (error.message.includes('Arcsin')) totalArcsin++;
+                if (error.message.includes('Arccos')) totalArccos++;
+                if (error.message.includes('Raíz cuadrada')) totalSqrt++;
+                if (error.message.includes('División')) totalDivision++;
+                if (error.message.includes('Logaritmo')) totalLog++;
+            }
+        }
+
+        const totalErrores = totalArcsin + totalArccos + totalSqrt + totalDivision + totalLog;
+        const porcentajeArcsin = (totalArcsin / totalErrores * 100).toFixed(2);
+        const porcentajeArccos = (totalArccos / totalErrores * 100).toFixed(2);
+        const porcentajeSqrt = (totalSqrt / totalErrores * 100).toFixed(2);
+        const porcentajeDivision = (totalDivision / totalErrores * 100).toFixed(2);
+        const porcentajeLog = (totalLog / totalErrores * 100).toFixed(2);
+
+        document.getElementById('totalArcsin').innerText = totalArcsin;
+        document.getElementById('porcentajeArcsin').innerText = porcentajeArcsin + '%';
+        document.getElementById('totalArccos').innerText = totalArccos;
+        document.getElementById('porcentajeArccos').innerText = porcentajeArccos + '%';
+        document.getElementById('totalSqrt').innerText = totalSqrt;
+        document.getElementById('porcentajeSqrt').innerText = porcentajeSqrt + '%';
+        document.getElementById('totalDivision').innerText = totalDivision;
+        document.getElementById('porcentajeDivision').innerText = porcentajeDivision + '%';
+        document.getElementById('totalLog').innerText = totalLog;
+        document.getElementById('porcentajeLog').innerText = porcentajeLog + '%';
+
+        const ctx = document.getElementById('myChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ['Errores Arcsin', 'Errores Arccos', 'Errores Raíz Cuadrada', 'Errores División', 'Errores Logaritmo'],
+                datasets: [{
+                    label: 'Errores',
+                    data: [totalArcsin, totalArccos, totalSqrt, totalDivision, totalLog],
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                aspectRatio: 1, // Mantiene un aspecto 1:1
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    tooltip: {
+                        enabled: true
+                    },
+                },
+                layout:{
+                    padding: 20
+                }
+            }
+        });
+    }
+    </script>
+</body>
+</html>
